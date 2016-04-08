@@ -6,18 +6,20 @@ import webapp2
 
 
 required = set(
-    ['User-Agent', 'Accept', 'Accept-Encoding',
-     'Cache-Control', 'Pragma', 'Expires',
-     'X-Serialize-Format', 'X-Gs-Cookie']
+    ['user-agent', 'accept', 'accept-encoding', 'accept-language',
+     'cache-control', 'pragma', 'expires', 'host', 'content-encoding'
+     'x-serialize-format', 'x-gs-cookie', 'x-unity-version', 'x-gs-accept']
 )
 
 
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
-        request_headers = dict(self.request.headers.items())
+        request_headers = dict(
+            (k.lower(), v) for k, v in self.request.headers.items()
+        )
         true_headers = (
             ((key, request_headers[key])
-             for key in request_headers if key in required)
+             for key in request_headers if key.lower() in required)
         )
         print(self.request.path)
         print(self.request.body)
