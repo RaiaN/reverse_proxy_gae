@@ -31,6 +31,17 @@ def return_basic_headers():
 
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
+        path = self.request.path
+        if path.startswith("/"):
+            path = self.request.path[1:]
+
+        self.redirect(
+            'http://dev.tinyarmypanoramic.appspot.com/ %s' % path,
+            permanent=True,
+            code=307,
+            request=self.request
+        )
+
         print("REQUEST HEADERS")
         print(self.request.headers)
         if "ping" in self.request.path:
