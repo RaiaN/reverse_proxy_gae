@@ -31,6 +31,8 @@ def return_basic_headers():
 
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
+        print("REQUEST HEADERS")
+        print(self.request.headers)
         if "ping" in self.request.path:
             true_headers = return_basic_headers()
         else:
@@ -49,6 +51,7 @@ class ProxyHandler(webapp2.RequestHandler):
         self.response.content_type = response.headers["Content-Type"]
         self.response.status = response.status_code
         self.response.headers = response.headers
+        print("RESPONSE HEADERS")
         print(response.headers)
 
         self.response.out.write(response.content)
