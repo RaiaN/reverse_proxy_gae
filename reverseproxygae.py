@@ -43,7 +43,11 @@ class ProxyHandler(webapp2.RequestHandler):
                 ((key, request_headers[key])
                  for key in request_headers if key.lower() in required)
             )
-        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % self.request.path
+
+        path = self.request.path
+        if path.startswith("/"):
+            path = self.request.path[1:]
+        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
              target_url, payload=self.request.body, method="POST",
              headers=dict(true_headers)
