@@ -40,8 +40,9 @@ class ProxyHandler(webapp2.RequestHandler):
         self.response.headers['Expires'] = 'Thu, 01 Dec 1994 16:00:00'
         print("TEST")
         print(response.content)
+        print(response.headers)
 
-        if self.response.info().get('Content-Encoding') == 'gzip':
+        if self.response.headers.get('Content-Encoding') == 'gzip':
             buf = StringIO.StringIO(self.response.read())
             gzip_f = gzip.GzipFile(fileobj=buf)
             content = gzip_f.read()
