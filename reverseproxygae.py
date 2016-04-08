@@ -71,8 +71,6 @@ class ProxyHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    webapp2.Route('/*', webapp2.RedirectHandler.new_factory(
-        'http://dev.tinyarmypanoramic.appspot.com', permanent=True)
-    ),
+    webapp2.Route('_uri', webapp2.RedirectHandler, defaults={'_uri': 'http://dev.tinyarmypanoramic.appspot.com'})
     # webapp2.Route(r'/<:.*>', handler=ProxyHandler)
 ])
