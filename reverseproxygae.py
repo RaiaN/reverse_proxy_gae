@@ -27,6 +27,11 @@ class ProxyHandler(webapp2.RequestHandler):
         self.response.content_type = response.headers["Content-Type"]
         self.response.status = response.status_code
         self.response.headers = response.headers
+        self.response.headers['Cache-Control'] = (
+            'no-cache, must-revalidate'
+        )
+        self.response.headers['Pragma'] = 'no-cache'
+        self.response.headers['Expires'] = 'Thu, 01 Dec 1994 16:00:00'
         self.response.out.write(response.content)
 
 
