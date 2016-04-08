@@ -54,7 +54,10 @@ class ProxyHandler(webapp2.RequestHandler):
         )
         self.response.content_type = response.headers["Content-Type"]
         self.response.status = response.status_code
-        self.response.headers = response.headers
+
+        for k, v in response.headers:
+            self.response.headers.add(k, v)
+
         print("RESPONSE HEADERS")
         print(response.headers)
 
