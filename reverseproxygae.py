@@ -31,37 +31,43 @@ def return_basic_headers():
 
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
-        print("REQUEST HEADERS")
-        print(self.request.headers)
-        if "ping" in self.request.path:
-            true_headers = return_basic_headers()
-        else:
-            request_headers = dict(
-                (k.lower(), v) for k, v in self.request.headers.items()
-            )
-            true_headers = (
-                ((key, request_headers[key])
-                 for key in request_headers if key.lower() in required)
-            )
-
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
-        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
-        response = fetch(
-             target_url, payload=self.request.body, method="POST",
-             headers=dict(true_headers)
-        )
-        self.response.content_type = response.headers["Content-Type"]
-        self.response.status = response.status_code
 
-        for k, v in response.headers.items():
-            self.response.headers.add(k, v)
+        self.redirect('http://dev.tinyarmypanoramic.appspot.com/ %s' % path)
 
-        print("RESPONSE HEADERS")
-        print(response.headers)
+        # print("REQUEST HEADERS")
+        # print(self.request.headers)
+        # if "ping" in self.request.path:
+        #     true_headers = return_basic_headers()
+        # else:
+        #     request_headers = dict(
+        #         (k.lower(), v) for k, v in self.request.headers.items()
+        #     )
+        #     true_headers = (
+        #         ((key, request_headers[key])
+        #          for key in request_headers if key.lower() in required)
+        #     )
 
-        self.response.out.write(response.content)
+        # path = self.request.path
+        # if path.startswith("/"):
+        #     path = self.request.path[1:]
+        # target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
+        # response = fetch(
+        #      target_url, payload=self.request.body, method="POST",
+        #      headers=dict(true_headers)
+        # )
+        # self.response.content_type = response.headers["Content-Type"]
+        # self.response.status = response.status_code
+
+        # for k, v in response.headers.items():
+        #     self.response.headers.add(k, v)
+
+        # print("RESPONSE HEADERS")
+        # print(response.headers)
+
+        # self.response.out.write(response.content)
 
 
 app = webapp2.WSGIApplication([
