@@ -14,6 +14,9 @@ required = set(
 
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
+        print(self.request.path)
+        print(self.request.body)
+        print(self.request.headers)
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
@@ -21,10 +24,7 @@ class ProxyHandler(webapp2.RequestHandler):
             ((key, request_headers[key])
              for key in request_headers if key.lower() in required)
         )
-        print(self.request.path)
-        print(self.request.body)
-        print(self.request.headers)
-        target_url = 'http://tinyarmypanoramic.appspot.com/%s' % self.request.path
+        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % self.request.path
         response = fetch(
              target_url, payload=self.request.body, method="POST",
              headers=dict(true_headers)
