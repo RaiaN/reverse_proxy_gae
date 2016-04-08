@@ -17,8 +17,8 @@ def return_basic_headers():
     h = (
         {
             'User-Agent': '0.1-dev/WindowsEditor/0.2/itunes',
-            'Accept': 'protocol/GSAPI.1, format/json',
-            'X-Serialize-Format': 'json'
+            'Accept': 'protocol/GSAPI.1, format/plist_amt',
+            'X-Serialize-Format': 'plist_amt'
         }
     )
     h['X-GS-Cookie'] = (
