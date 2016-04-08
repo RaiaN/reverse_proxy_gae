@@ -19,6 +19,9 @@ class ProxyHandler(webapp2.RequestHandler):
             ((key, request_headers[key])
              for key in request_headers if key in required)
         )
+        print(self.request.path)
+        print(self.request.body)
+        print(self.request.headers)
         target_url = 'http://tinyarmypanoramic.appspot.com/%s' % self.request.path
         response = fetch(
              target_url, payload=self.request.body, method="POST",
