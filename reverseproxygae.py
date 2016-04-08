@@ -1,10 +1,9 @@
-#!/usr/bin/env python
+from google.appengine.api.urlfetch import fetch
 
-from flask import Flask, request, Response
-from StringIO import StringIO
-import requests
+import cgi
+import datetime
+import webapp2
 
-app = Flask(__name__)
 
 required = set(
     ['User-Agent', 'Accept', 'Accept-Encoding',
@@ -13,27 +12,24 @@ required = set(
 )
 
 
-@app.route('/', methods=['GET', 'POST'], defaults={'path': ''})
-@app.route('/<path:path>', methods=['GET', 'POST'])
-def catch_all(path):
-    request_headers = dict(request.headers.items())
-    true_headers = (
-        ((key, request_headers[key])
-         for key in request_headers if key in required)
-    )
-    target_url = 'http://tinyarmypanoramic.appspot.com/%s' % path
-    response = requests.post(
-        target_url,
-        headers=dict(true_headers),
-        data=request.data
-    )
-    flask_response = Response(
-        StringIO(response.content),
-        content_type=response.headers["Content-Type"],
-        status=response.status_code,
-        headers=response.headers
-    )
-    return flask_response
+class ProxyHandler(webapp2.RequestHandler):
+    def post(self):
+        request_headers = dict(self.request.headers.items())
+        true_headers = (
+            ((key, request_headers[key])
+             for key in request_headers if key in required)
+        )
+        target_url = 'http://tinyarmypanoramic.appspot.com/%s' % self.request.path
+        # response = fetch(
+        #      target_url, payload=self.request.data, method="POST",
+        #      headers=dict(true_headers)
+        # )
+        # self.response.content_type = response.headers["Content-Type"]
+        # self.response.status = response.status_code
+        # self.response.headers = response.headers
+        self.response.out.write("TEST") # response.content)
 
-if __name__ == '__main__':
-    app.run()
+
+app = webapp2.WSGIApplication([
+    webapp2.Route(r'/<:.*>', handler=ProxyHandler),
+])
