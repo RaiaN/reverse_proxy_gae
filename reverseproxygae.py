@@ -8,10 +8,10 @@ import gzip
 
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
-     'user-agent',
-     'cache-control', 'pragma', 'expires', 'content-encoding',
-     'x-serialize-format', 'x-gs-cookie', 'x-unity-version', 'x-gs-accept']
+     'user-agent', 'cache-control', 'x-serialize-format',
+     'x-gs-cookie']
 )
+
 
 def return_basic_headers():
     h = (
