@@ -31,46 +31,39 @@ def return_basic_headers():
 
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
+        print("REQUEST HEADERS")
+        print(self.request.headers)
+        if "ping" in self.request.path:
+            true_headers = return_basic_headers()
+        else:
+            request_headers = dict(
+                (k.lower(), v) for k, v in self.request.headers.items()
+            )
+            true_headers = (
+                ((key, request_headers[key])
+                 for key in request_headers if key.lower() in required)
+            )
+
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
+        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
+        response = fetch(
+             target_url, payload=self.request.body, method="POST",
+             headers=dict(true_headers)
+        )
+        self.response.content_type = response.headers["Content-Type"]
+        self.response.status = response.status_code
 
-        self.redirect('http://dev.tinyarmypanoramic.appspot.com/ %s' % path)
+        for k, v in response.headers.items():
+            self.response.headers.add(k, v)
 
-        # print("REQUEST HEADERS")
-        # print(self.request.headers)
-        # if "ping" in self.request.path:
-        #     true_headers = return_basic_headers()
-        # else:
-        #     request_headers = dict(
-        #         (k.lower(), v) for k, v in self.request.headers.items()
-        #     )
-        #     true_headers = (
-        #         ((key, request_headers[key])
-        #          for key in request_headers if key.lower() in required)
-        #     )
+        print("RESPONSE HEADERS")
+        print(response.headers)
 
-        # path = self.request.path
-        # if path.startswith("/"):
-        #     path = self.request.path[1:]
-        # target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
-        # response = fetch(
-        #      target_url, payload=self.request.body, method="POST",
-        #      headers=dict(true_headers)
-        # )
-        # self.response.content_type = response.headers["Content-Type"]
-        # self.response.status = response.status_code
-
-        # for k, v in response.headers.items():
-        #     self.response.headers.add(k, v)
-
-        # print("RESPONSE HEADERS")
-        # print(response.headers)
-
-        # self.response.out.write(response.content)
+        self.response.out.write(response.content)
 
 
 app = webapp2.WSGIApplication([
-    webapp2.Route('_uri', webapp2.RedirectHandler, defaults={'_uri': 'http://dev.tinyarmypanoramic.appspot.com'})
-    # webapp2.Route(r'/<:.*>', handler=ProxyHandler)
+    webapp2.Route(r'/<:.*>', handler=ProxyHandler)
 ])
