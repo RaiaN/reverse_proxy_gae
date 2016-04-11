@@ -1,7 +1,7 @@
 from google.appengine.api.urlfetch import fetch
 
 import webapp2
-import amt_plist as plist_amt
+import urllib
 
 FORMAT_PLIST_AMT = 'plist_amt'
 
@@ -38,7 +38,7 @@ class ProxyHandler(webapp2.RequestHandler):
         print("REQUEST HEADERS")
         print(self.request.headers)
 
-        payload = self.request.body
+        payload = urllib.urlencode(self.request.body)
         print(payload)
 
         request_headers = dict(
