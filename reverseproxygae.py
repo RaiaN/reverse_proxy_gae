@@ -8,6 +8,7 @@ import webapp2
 from StringIO import StringIO
 
 FORMAT_PLIST_AMT = 'plist_amt'
+GZIP_ENCODING = "gzip"
 
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
@@ -27,13 +28,17 @@ class ProxyHandler(webapp2.RequestHandler):
         print(self.request.headers)
         print(self.request.POST)
 
-        buf = StringIO(self.request.body)
-        json_str = gzip.GzipFile(fileobj=buf).read()
-        payload = json.loads(json_str.decode('utf-8'))
-
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
+
+        json_str = self.request.body
+        if request_headers["content-encoding"] == GZIP_ENCODING:
+            json_str = gzip.GzipFile(
+                fileobj=StringIO(json_str)
+            ).read()
+        payload = json.loads(json_str.decode('utf-8'))
+
         true_headers = dict(
             ((key, request_headers[key])
              for key in request_headers if key in required)
