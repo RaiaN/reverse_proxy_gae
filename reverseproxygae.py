@@ -35,7 +35,6 @@ class ProxyHandler(webapp2.RequestHandler):
         print("REQUEST HEADERS")
         print(self.request.headers)
         print(str(self.request.POST))
-        print(str(self.request.body))
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
