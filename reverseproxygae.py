@@ -1,8 +1,11 @@
 from google.appengine.api.urlfetch import fetch
 
+import gzip
 import json
 import urllib
 import webapp2
+
+from StringIO import StringIO
 
 FORMAT_PLIST_AMT = 'plist_amt'
 
@@ -24,8 +27,9 @@ class ProxyHandler(webapp2.RequestHandler):
         print(self.request.headers)
         print(self.request.POST)
 
-        payload = self.request.body.decode('utf-8')
-        payload = json.loads(payload)
+        buf = StringIO(self.request.body)
+        json_str = gzip.GzipFile(fileobj=buf)
+        payload = json.loads(json_str.decode('utf-8'))
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
