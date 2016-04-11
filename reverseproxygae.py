@@ -37,13 +37,8 @@ class ProxyHandler(webapp2.RequestHandler):
         print(path)
         print("REQUEST HEADERS")
         print(self.request.headers)
-        print(str(self.request.POST))
 
-        payload = ""
-        if self.request.body_file_raw:
-            payload = plist_amt.AMTPlist().read(
-                self.request.body_file_raw.read()
-            )['root']
+        payload = self.request.body
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
@@ -57,10 +52,10 @@ class ProxyHandler(webapp2.RequestHandler):
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
-             target_url,
-             payload=payload,
-             method="POST",
-             headers=true_headers
+            target_url,
+            payload=payload,
+            method="POST",
+            headers=true_headers
         )
         self.response.content_type = response.headers["Content-Type"]
         self.response.status = response.status_code
