@@ -1,10 +1,6 @@
 from google.appengine.api.urlfetch import fetch
 
-# import cgi
-# import datetime
 import webapp2
-from StringIO import StringIO
-import gzip
 
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
@@ -13,20 +9,20 @@ required = set(
 )
 
 
-def return_basic_headers():
-    h = (
-        {
-            'User-Agent': '0.1-dev/WindowsEditor/0.2/itunes',
-            'Accept': 'protocol/GSAPI.1, format/json',
-            'X-Serialize-Format': 'json'
-        }
-    )
-    h['X-GS-Cookie'] = (
-        'device_identifer=%s;account_type=guest;\
-         account_id=guest;\
-         account_secure=799a1ea440671c73d1124dd0b288df62' % 'Kong6F2D775D10266339A4A0C148F587774D'
-    )
-    return h
+# def return_basic_headers():
+#     h = (
+#         {
+#             'User-Agent': '0.1-dev/WindowsEditor/0.2/itunes',
+#             'Accept': 'protocol/GSAPI.1, format/json',
+#             'X-Serialize-Format': 'json'
+#         }
+#     )
+#     h['X-GS-Cookie'] = (
+#         'device_identifer=%s;account_type=guest;\
+#          account_id=guest;\
+#          account_secure=799a1ea440671c73d1124dd0b288df62' % 'Kong6F2D775D10266339A4A0C148F587774D'
+#     )
+#     return h
 
 
 class ProxyHandler(webapp2.RequestHandler):
@@ -34,20 +30,18 @@ class ProxyHandler(webapp2.RequestHandler):
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
-        print(path)
 
+        print(path)
         print("REQUEST HEADERS")
         print(self.request.headers)
-        if "ping" in self.request.path:
-            true_headers = return_basic_headers()
-        else:
-            request_headers = dict(
-                (k.lower(), v) for k, v in self.request.headers.items()
-            )
-            true_headers = (
-                ((key, request_headers[key])
-                 for key in request_headers if key.lower() in required)
-            )
+
+        request_headers = dict(
+            (k.lower(), v) for k, v in self.request.headers.items()
+        )
+        true_headers = (
+            ((key, request_headers[key])
+             for key in request_headers if key.lower() in required)
+        )
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
