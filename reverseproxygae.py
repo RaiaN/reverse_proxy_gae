@@ -41,6 +41,7 @@ class ProxyHandler(webapp2.RequestHandler):
         print(self.request.POST)
 
         payload = self.request.body.decode('utf-8')
+        print(payload)
         payload = json.loads(payload)
         print(payload)
 
