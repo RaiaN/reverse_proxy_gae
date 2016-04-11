@@ -40,11 +40,10 @@ class ProxyHandler(webapp2.RequestHandler):
         print(str(self.request.POST))
 
         payload = ""
-        if format == FORMAT_PLIST_AMT:
+        if self.request.body_file_raw:
             payload = plist_amt.AMTPlist().read(
                 self.request.body_file_raw
             )['root']
-        print(payload)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
