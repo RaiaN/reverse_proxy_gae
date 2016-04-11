@@ -28,7 +28,7 @@ class ProxyHandler(webapp2.RequestHandler):
         print(self.request.POST)
 
         buf = StringIO(self.request.body)
-        json_str = gzip.GzipFile(fileobj=buf)
+        json_str = gzip.GzipFile(fileobj=buf).read()
         payload = json.loads(json_str.decode('utf-8'))
 
         request_headers = dict(
