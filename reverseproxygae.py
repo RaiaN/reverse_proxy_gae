@@ -13,22 +13,6 @@ required = set(
 )
 
 
-# def return_basic_headers():
-#     h = (
-#         {
-#             'User-Agent': '0.1-dev/WindowsEditor/0.2/itunes',
-#             'Accept': 'protocol/GSAPI.1, format/json',
-#             'X-Serialize-Format': 'json'
-#         }
-#     )
-#     h['X-GS-Cookie'] = (
-#         'device_identifer=%s;account_type=guest;\
-#          account_id=guest;\
-#          account_secure=799a1ea440671c73d1124dd0b288df62' % 'Kong6F2D775D10266339A4A0C148F587774D'
-#     )
-#     return h
-
-
 class ProxyHandler(webapp2.RequestHandler):
     def post(self, *args, **kwargs):
         path = self.request.path
