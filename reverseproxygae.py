@@ -42,7 +42,7 @@ class ProxyHandler(webapp2.RequestHandler):
             ((key, request_headers[key])
              for key in request_headers if key in required)
         )
-        true_headers["User-Agent"] = true_headers["X-Gs-User-Agent"]
+        true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
