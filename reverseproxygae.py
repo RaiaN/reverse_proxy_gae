@@ -42,7 +42,7 @@ class ProxyHandler(webapp2.RequestHandler):
         payload = ""
         if self.request.body_file_raw:
             payload = plist_amt.AMTPlist().read(
-                self.request.body_file_raw
+                self.request.body_file_raw.read()
             )['root']
 
         request_headers = dict(
