@@ -38,8 +38,8 @@ class ProxyHandler(webapp2.RequestHandler):
         print("REQUEST HEADERS")
         print(self.request.headers)
 
-        payload = self.request.body
-        if isinstance(self.request.body, dict):
+        payload = self.request.body.decode('utf-8')
+        if isinstance(payload, dict):
             payload = urllib.urlencode(self.request.body)
         print(payload)
 
