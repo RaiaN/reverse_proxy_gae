@@ -39,6 +39,7 @@ class ProxyHandler(webapp2.RequestHandler):
         print(self.request.headers)
 
         payload = self.request.body.decode('utf-8')
+        print(type(payload))
         if isinstance(payload, dict):
             payload = urllib.urlencode(self.request.body)
         print(payload)
