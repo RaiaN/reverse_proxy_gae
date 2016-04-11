@@ -1,6 +1,9 @@
 from google.appengine.api.urlfetch import fetch
 
 import webapp2
+import amt_plist as plist_amt
+
+FORMAT_PLIST_AMT = 'plist_amt'
 
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
@@ -35,7 +38,13 @@ class ProxyHandler(webapp2.RequestHandler):
         print("REQUEST HEADERS")
         print(self.request.headers)
         print(str(self.request.POST))
-        payload = self.request.body_file_raw
+
+        payload = ""
+        if format == FORMAT_PLIST_AMT:
+            payload = plist_amt.AMTPlist().read(
+                self.request.body_file_raw
+            )['root']
+        print(payload)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
@@ -49,7 +58,9 @@ class ProxyHandler(webapp2.RequestHandler):
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
-             target_url, payload=payload, method="POST",
+             target_url,
+             payload=payload,
+             method="POST",
              headers=true_headers
         )
         self.response.content_type = response.headers["Content-Type"]
