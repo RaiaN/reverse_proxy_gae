@@ -5,7 +5,7 @@ import webapp2
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
      'user-agent', 'cache-control', 'x-serialize-format',
-     'x-gs-cookie', 'x-gs-user-agent']
+     'x-gs-cookie', 'x-gs-user-agent', 'x-gs-accept']
 )
 
 
@@ -43,6 +43,7 @@ class ProxyHandler(webapp2.RequestHandler):
              for key in request_headers if key in required)
         )
         true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
+        true_headers["Accept"] = true_headers["x-gs-accept"]
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
