@@ -5,7 +5,7 @@ import webapp2
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
      'user-agent', 'cache-control', 'x-serialize-format',
-     'x-gs-cookie']
+     'x-gs-cookie', 'x-gs-user-agent']
 )
 
 
@@ -38,15 +38,16 @@ class ProxyHandler(webapp2.RequestHandler):
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
-        true_headers = (
+        true_headers = dict(
             ((key, request_headers[key])
-             for key in request_headers if key.lower() in required)
+             for key in request_headers if key in required)
         )
+        true_headers["User-Agent"] = true_headers["X-Gs-User-Agent"]
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
              target_url, payload=self.request.body, method="POST",
-             headers=dict(true_headers)
+             headers=true_headers
         )
         self.response.content_type = response.headers["Content-Type"]
         self.response.status = response.status_code
