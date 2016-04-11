@@ -38,7 +38,9 @@ class ProxyHandler(webapp2.RequestHandler):
         print("REQUEST HEADERS")
         print(self.request.headers)
 
-        payload = urllib.urlencode(self.request.body)
+        payload = self.request.body
+        if isinstance(self.request.body, dict):
+            payload = urllib.urlencode(self.request.body)
         print(payload)
 
         request_headers = dict(
