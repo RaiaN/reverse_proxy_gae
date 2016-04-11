@@ -1,7 +1,8 @@
 from google.appengine.api.urlfetch import fetch
 
-import webapp2
+import json
 import urllib
+import webapp2
 
 FORMAT_PLIST_AMT = 'plist_amt'
 
@@ -37,11 +38,10 @@ class ProxyHandler(webapp2.RequestHandler):
         print(path)
         print("REQUEST HEADERS")
         print(self.request.headers)
+        print(self.request.POST)
 
         payload = self.request.body.decode('utf-8')
-        print(type(payload))
-        if isinstance(payload, dict):
-            payload = urllib.urlencode(self.request.body)
+        payload = json.loads(payload)
         print(payload)
 
         request_headers = dict(
@@ -57,7 +57,7 @@ class ProxyHandler(webapp2.RequestHandler):
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
             target_url,
-            payload=payload,
+            payload=urllib.urlencode(payload),
             method="POST",
             headers=true_headers
         )
