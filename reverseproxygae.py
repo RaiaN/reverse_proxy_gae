@@ -55,7 +55,7 @@ class ProxyHandler(webapp2.RequestHandler):
         true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
         true_headers["Accept"] = true_headers["x-gs-accept"]
 
-        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
+        target_url = 'http://tinyarmypanoramic.appspot.com/%s' % path
         response = fetch(
             target_url,
             payload=urllib.urlencode(payload),
