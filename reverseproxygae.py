@@ -30,10 +30,10 @@ class ProxyHandler(webapp2.RequestHandler):
         if path.startswith("/"):
             path = self.request.path[1:]
 
-        print(path)
-        print("REQUEST HEADERS")
-        print(self.request.headers)
-        print(self.request.POST)
+        # print(path)
+        # print("REQUEST HEADERS")
+        # print(self.request.headers)
+        # print(self.request.POST)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
@@ -78,9 +78,6 @@ class ProxyHandler(webapp2.RequestHandler):
             "; charset=utf-8", ""
         )
 
-        print("Response Content-Type")
-        print(response_content_type)
-
         self.response.content_type = response_content_type
         self.response.status = response.status_code
 
@@ -93,9 +90,9 @@ class ProxyHandler(webapp2.RequestHandler):
             ):
                 self.response.headers.add("gs-content-type", "json")
 
-        print("RESPONSE HEADERS")
-        print(response.headers)
-        print(self.response.headers)
+        # print("RESPONSE HEADERS")
+        # print(response.headers)
+        # print(self.response.headers)
 
         self.response.out.write(response.content)
 
