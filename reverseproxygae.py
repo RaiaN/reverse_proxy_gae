@@ -1,4 +1,6 @@
 from google.appengine.api.urlfetch import fetch
+from google.appengine.api import urlfetch
+urlfetch.set_default_fetch_deadline(60)
 
 import gzip
 import json
