@@ -57,7 +57,14 @@ class ProxyHandler(webapp2.RequestHandler):
         true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
         true_headers["Accept"] = true_headers["x-gs-accept"]
 
-        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
+        conditions = ("configs/check_updates" in path,
+                      "validate_action/Evolve" in path,
+                      "validate_action/Fuse" in path,
+                      "validate_action/SellMonsters" in path)
+        if any(conditions):
+            target_url = 'http://tinyarmypanoramic.appspot.com/%s' % path
+        else:
+            target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
 
         response = fetch(
             target_url,
