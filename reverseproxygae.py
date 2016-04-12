@@ -77,6 +77,7 @@ class ProxyHandler(webapp2.RequestHandler):
 
         print("RESPONSE HEADERS")
         print(response.headers)
+        print(self.response.headers)
 
         self.response.out.write(response.content)
 
