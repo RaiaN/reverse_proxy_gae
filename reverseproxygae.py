@@ -62,7 +62,14 @@ class ProxyHandler(webapp2.RequestHandler):
             method="POST",
             headers=true_headers
         )
-        self.response.content_type = response.headers["Content-Type"]
+        response_content_type = response.headers["Content-Type"].replace(
+            "; charset=utf-8", ""
+        )
+
+        print("Response Content-Type")
+        print(response_content_type)
+
+        self.response.content_type = response_content_type
         self.response.status = response.status_code
 
         for k, v in response.headers.items():
