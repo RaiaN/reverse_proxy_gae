@@ -76,7 +76,10 @@ class ProxyHandler(webapp2.RequestHandler):
             self.response.headers.add(k, v)
 
         if "profile/load" in path:
-            self.response.headers.add("GS-Content-Type", "json")
+            if "gs-content-type" not in set(
+                key.lower() for key in self.response.headers.keys()
+            ):
+                self.response.headers.add("gs-content-type", "json")
 
         print("RESPONSE HEADERS")
         print(response.headers)
