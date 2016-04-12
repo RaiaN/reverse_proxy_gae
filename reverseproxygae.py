@@ -17,6 +17,12 @@ required = set(
 
 
 class ProxyHandler(webapp2.RequestHandler):
+    def get(self, *args, **kwargs):
+        print("IT WORKS!")
+        print(self.request.headers)
+        print(self.request.GET)
+        return self.response.out.write("OK")
+
     def post(self, *args, **kwargs):
         path = self.request.path
         if path.startswith("/"):
