@@ -7,7 +7,6 @@ import webapp2
 
 from StringIO import StringIO
 
-FORMAT_PLIST_AMT = 'plist_amt'
 GZIP_ENCODING = "gzip"
 
 required = set(
@@ -39,6 +38,9 @@ class ProxyHandler(webapp2.RequestHandler):
                 fileobj=StringIO(json_str)
             ).read()
         payload = json.loads(json_str.decode('utf-8'))
+
+        if 'get_parent' in path:
+            print(payload)
 
         true_headers = dict(
             ((key, request_headers[key])
