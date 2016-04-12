@@ -56,12 +56,15 @@ class ProxyHandler(webapp2.RequestHandler):
         true_headers["Accept"] = true_headers["x-gs-accept"]
 
         target_url = 'http://tinyarmypanoramic.appspot.com/%s' % path
+
         response = fetch(
             target_url,
             payload=urllib.urlencode(payload),
             method="POST",
-            headers=true_headers
+            headers=true_headers,
+            deadline=60
         )
+
         response_content_type = response.headers["Content-Type"].replace(
             "; charset=utf-8", ""
         )
