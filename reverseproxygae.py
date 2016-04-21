@@ -62,7 +62,7 @@ class ProxyHandler(webapp2.RequestHandler):
         #               "validate_action/Fuse" in path,
         #               "validate_action/SellMonsters" in path)
         # if any(conditions):
-        target_url = 'http://tinyarmypanoramic.appspot.com/%s' % path
+        target_url = 'http://stage.tinyarmypanoramic.appspot.com/%s' % path
         # else:
         #     target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
 
