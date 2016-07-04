@@ -30,12 +30,12 @@ class ProxyHandler(webapp2.RequestHandler):
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
-        print(path)
+        # print(path)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
-        print(request_headers)
+        # print(request_headers)
 
         json_str = self.request.body
         if "content-encoding" in request_headers and\
@@ -56,7 +56,7 @@ class ProxyHandler(webapp2.RequestHandler):
         true_headers["Accept"] = true_headers["x-gs-accept"]
 
         target_url = 'http://stage.adtinyarmypanoramic.appspot.com/%s' % path
-        print(target_url)
+        # print(target_url)
 
         response = fetch(
             target_url,
@@ -80,7 +80,7 @@ class ProxyHandler(webapp2.RequestHandler):
             ):
                 self.response.headers.add("gs-content-type", "json")
 
-        print(response.content)
+        # print(response.content)
 
         self.response.out.write(response.content)
 
