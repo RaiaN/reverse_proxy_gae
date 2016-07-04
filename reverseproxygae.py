@@ -1,6 +1,5 @@
 from google.appengine.api.urlfetch import fetch
 from google.appengine.api import urlfetch
-urlfetch.set_default_fetch_deadline(60)
 
 import gzip
 import json
@@ -26,14 +25,11 @@ class ProxyHandler(webapp2.RequestHandler):
         return self.response.out.write("OK")
 
     def post(self, *args, **kwargs):
+        urlfetch.set_default_fetch_deadline(60)
+
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
-
-        # print(path)
-        # print("REQUEST HEADERS")
-        # print(self.request.headers)
-        # print(self.request.POST)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
@@ -57,14 +53,7 @@ class ProxyHandler(webapp2.RequestHandler):
         true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
         true_headers["Accept"] = true_headers["x-gs-accept"]
 
-        # conditions = ("configs/check_updates" in path,
-        #               "validate_action/Evolve" in path,
-        #               "validate_action/Fuse" in path,
-        #               "validate_action/SellMonsters" in path)
-        # if any(conditions):
-        target_url = 'http://stage.tinyarmypanoramic.appspot.com/%s' % path
-        # else:
-        #     target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
+        target_url = 'http://stage.adtinyarmypanoramic.appspot.com/%s' % path
 
         response = fetch(
             target_url,
@@ -74,9 +63,7 @@ class ProxyHandler(webapp2.RequestHandler):
             deadline=60
         )
 
-        response_content_type = response.headers["Content-Type"].replace(
-            "; charset=utf-8", ""
-        )
+        response_content_type = response.headers["Content-Type"].replace("; charset=utf-8", "")
 
         self.response.content_type = response_content_type
         self.response.status = response.status_code
@@ -89,10 +76,6 @@ class ProxyHandler(webapp2.RequestHandler):
                 key.lower() for key in self.response.headers.keys()
             ):
                 self.response.headers.add("gs-content-type", "json")
-
-        # print("RESPONSE HEADERS")
-        # print(response.headers)
-        # print(self.response.headers)
 
         self.response.out.write(response.content)
 
