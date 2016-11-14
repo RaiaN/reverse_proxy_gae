@@ -35,6 +35,7 @@ class ProxyHandler(webapp2.RequestHandler):
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
+        print("Request headers")
         print(request_headers)
 
         json_str = self.request.body
@@ -55,6 +56,8 @@ class ProxyHandler(webapp2.RequestHandler):
         )
         true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
         true_headers["Accept"] = true_headers["x-gs-accept"]
+        print("True headers")
+        print(true_headers)
 
         target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
         # print(target_url)
@@ -66,6 +69,7 @@ class ProxyHandler(webapp2.RequestHandler):
             headers=true_headers,
             deadline=60
         )
+        print("Response headers")
         print(response.headers)
 
         response_content_type = response.headers["Content-Type"].replace("; charset=utf-8", "")
