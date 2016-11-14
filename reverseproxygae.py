@@ -39,16 +39,16 @@ class ProxyHandler(webapp2.RequestHandler):
         print(request_headers)
 
         json_str = self.request.body
-        print(json_str)
-        if "content-encoding" in request_headers and\
-                request_headers["content-encoding"] == GZIP_ENCODING:
-            json_str = gzip.GzipFile(
-                fileobj=StringIO(json_str)
-            ).read()
-        payload = json.loads(json_str.decode('utf-8'))
+        # print(json_str)
+        # if "content-encoding" in request_headers and\
+        #         request_headers["content-encoding"] == GZIP_ENCODING:
+        #     json_str = gzip.GzipFile(
+        #         fileobj=StringIO(json_str)
+        #     ).read()
+        # payload = json.loads(json_str.decode('utf-8'))
 
-        if 'get_parent' in path:
-            print(payload)
+        # if 'get_parent' in path:
+        #     print(payload)
 
         true_headers = dict(
             ((key, request_headers[key])
@@ -64,7 +64,7 @@ class ProxyHandler(webapp2.RequestHandler):
 
         response = fetch(
             target_url,
-            payload=urllib.urlencode(json_str),
+            payload=json_str,
             method="POST",
             headers=true_headers,
             deadline=60
