@@ -39,7 +39,7 @@ class ProxyHandler(webapp2.RequestHandler):
         print(request_headers)
 
         json_str = self.request.body
-        print(json_str)
+        # print(json_str)
         if "content-encoding" in request_headers and\
                 request_headers["content-encoding"] == GZIP_ENCODING:
             json_str = gzip.GzipFile(
