@@ -30,7 +30,7 @@ class ProxyHandler(webapp2.RequestHandler):
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
-        # print(path)
+        print(path)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
