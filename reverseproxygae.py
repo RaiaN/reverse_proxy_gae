@@ -52,10 +52,10 @@ class ProxyHandler(webapp2.RequestHandler):
 
         true_headers = dict(
             ((key, request_headers[key])
-             for key in request_headers if key in required)
+             for key in request_headers)
         )
-        true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
-        true_headers["Accept"] = true_headers["x-gs-accept"]
+        # true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
+        # true_headers["Accept"] = true_headers["x-gs-accept"]
         print("True headers")
         print(true_headers)
 
@@ -64,7 +64,7 @@ class ProxyHandler(webapp2.RequestHandler):
 
         response = fetch(
             target_url,
-            payload=json_str,
+            payload=urllib.urlencode(json_str),
             method="POST",
             headers=true_headers,
             deadline=60
