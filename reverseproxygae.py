@@ -13,7 +13,7 @@ GZIP_ENCODING = "gzip"
 required = set(
     ['accept', 'accept-encoding', 'accept-language', 'connection',
      'user-agent', 'cache-control', 'x-serialize-format',
-     'x-gs-cookie', 'x-gs-user-agent', 'x-gs-accept']
+     'x-gs-cookie', 'x-gs-user-agent', 'x-gs-accept', 'secure_string']
 )
 
 
@@ -30,12 +30,12 @@ class ProxyHandler(webapp2.RequestHandler):
         path = self.request.path
         if path.startswith("/"):
             path = self.request.path[1:]
-        # print(path)
+        print(path)
 
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
-        # print(request_headers)
+        print(request_headers)
 
         json_str = self.request.body
         if "content-encoding" in request_headers and\
@@ -55,8 +55,8 @@ class ProxyHandler(webapp2.RequestHandler):
         true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
         true_headers["Accept"] = true_headers["x-gs-accept"]
 
-        target_url = 'http://stage.adtinyarmypanoramic.appspot.com/%s' % path
-        # print(target_url)
+        target_url = 'http://dev.tinyarmypanoramic.appspot.com/%s' % path
+        print(target_url)
 
         response = fetch(
             target_url,
