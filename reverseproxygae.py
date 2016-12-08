@@ -34,7 +34,7 @@ class ProxyHandler(webapp2.RequestHandler):
         print("True headers")
         print(true_headers)
 
-        target_url = 'http://blitztinyarmypanoramic.appspot.com/%s' % path
+        target_url = 'http://china.blitztinyarmypanoramic.appspot.com/%s' % path
         print(target_url)
 
         response = fetch(
