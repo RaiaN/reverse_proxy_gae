@@ -8,14 +8,6 @@ import webapp2
 
 from StringIO import StringIO
 
-GZIP_ENCODING = "gzip"
-
-required = set(
-    ['accept', 'accept-encoding', 'accept-language', 'connection',
-     'user-agent', 'cache-control', 'x-serialize-format',
-     'x-gs-cookie', 'x-gs-user-agent', 'x-gs-accept', 'secure-string']
-)
-
 
 class ProxyHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
@@ -35,58 +27,29 @@ class ProxyHandler(webapp2.RequestHandler):
         request_headers = dict(
             (k.lower(), v) for k, v in self.request.headers.items()
         )
-        # print("Request headers")
-        # print(request_headers)
+        print("Request headers")
+        print(request_headers)
 
-        json_str = self.request.body
-        # print(json_str)
-        if "content-encoding" in request_headers and\
-                request_headers["content-encoding"] == GZIP_ENCODING:
-            json_str = gzip.GzipFile(
-                fileobj=StringIO(json_str)
-            ).read()
-        payload = json.loads(json_str.decode('utf-8'))
+        true_headers = dict(((key, request_headers[key]) for key in request_headers))
+        print("True headers")
+        print(true_headers)
 
-        if 'get_parent' in path:
-            print(payload)
-
-        true_headers = dict(
-            ((key, request_headers[key])
-             for key in request_headers if key in required)
-        )
-        true_headers["User-Agent"] = true_headers["x-gs-user-agent"]
-        true_headers["Accept"] = true_headers["x-gs-accept"]
-        # print("True headers")
-        # print(true_headers)
-
-        target_url = 'http://tinyarmypanoramic.appspot.com/%s' % path
-        # print(target_url)
+        target_url = 'http://blitztinyarmypanoramic.appspot.com/%s' % path
+        print(target_url)
 
         response = fetch(
             target_url,
-            payload=urllib.urlencode(payload),
+            payload=self.request.body,
             method="POST",
             headers=true_headers,
             deadline=60
         )
-        # print("Response headers")
-        # print(response.headers)
-
-        response_content_type = response.headers["Content-Type"].replace("; charset=utf-8", "")
 
         self.response.content_type = response_content_type
         self.response.status = response.status_code
 
         for k, v in response.headers.items():
             self.response.headers.add(k, v)
-
-        if "profile/load" in path:
-            if "gs-content-type" not in set(
-                key.lower() for key in self.response.headers.keys()
-            ):
-                self.response.headers.add("gs-content-type", "json")
-
-        # print(response.content)
 
         self.response.out.write(response.content)
 
