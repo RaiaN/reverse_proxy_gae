@@ -45,7 +45,7 @@ class ProxyHandler(webapp2.RequestHandler):
             deadline=60
         )
 
-        self.response.content_type = response_content_type
+        self.response.content_type = 'application/json'
         self.response.status = response.status_code
 
         for k, v in response.headers.items():
